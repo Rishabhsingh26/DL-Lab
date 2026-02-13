@@ -1,4 +1,3 @@
-code for MLP Implementation
 import numpy as np
 import matplotlib.pyplot as plt
 from tensorflow.keras.models import Sequential
@@ -31,3 +30,4 @@ print("Final Accuracy:", acc)
 pred = model.predict(X)
 print("Predictions:")
 print(pred)
+
