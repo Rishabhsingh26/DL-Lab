@@ -1,0 +1,36 @@
+import numpy as np
+import time
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import SimpleRNN, LSTM, GRU, Dense
+
+# Dummy dataset
+X = np.random.rand(1000, 10, 1)
+y = np.sum(X, axis=1)
+
+def build_model(model_type):
+    model = Sequential()
+    
+    if model_type == "RNN":
+        model.add(SimpleRNN(32, input_shape=(10, 1)))
+    elif model_type == "LSTM":
+        model.add(LSTM(32, input_shape=(10, 1)))
+    elif model_type == "GRU":
+        model.add(GRU(32, input_shape=(10, 1)))
+    
+    model.add(Dense(1))
+    model.compile(optimizer='adam', loss='mse')
+    
+    return model
+
+models = ["RNN", "LSTM", "GRU"]
+
+for m in models:
+    print(f"\nTraining {m} model...")
+    model = build_model(m)
+    
+    start = time.time()
+    history = model.fit(X, y, epochs=5, batch_size=32, verbose=0)
+    end = time.time()
+    
+    print(f"{m} Loss: {history.history['loss'][-1]:.4f}")
+    print(f"{m} Training Time: {end - start:.2f} seconds")
