@@ -1,0 +1,28 @@
+import torch
+import torch.nn.functional as F
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Sample sentence
+sentence = ["I", "love", "deep", "learning"]
+
+# Raw attention scores
+attention_weights = torch.tensor([0.1, 0.3, 0.4, 0.2])
+
+# Apply softmax (normalization)
+attention_weights = F.softmax(attention_weights, dim=0).detach().numpy()
+
+print("Attention Weights:", attention_weights)
+
+# Plot heatmap
+plt.figure(figsize=(8, 2))
+sns.heatmap(
+    [attention_weights],
+    annot=True,
+    xticklabels=sentence,
+    cmap="Blues"
+)
+
+plt.title("Attention Heatmap")
+plt.xlabel("Words")
+plt.show()
