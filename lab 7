@@ -1,0 +1,39 @@
+import tensorflow as tf
+from transformers import BertTokenizer, TFBertForSequenceClassification
+
+# Load tokenizer
+tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
+
+# Sample data
+texts = ["I love AI", "I hate bugs"]
+labels = tf.constant([1, 0])  # convert to tensor
+
+# Tokenization
+encodings = tokenizer(
+    texts,
+    padding=True,
+    truncation=True,
+    return_tensors="tf"
+)
+
+# Load pre-trained BERT
+model = TFBertForSequenceClassification.from_pretrained('bert-base-uncased')
+
+# Compile model
+optimizer = tf.keras.optimizers.Adam(learning_rate=3e-5)
+
+model.compile(
+    optimizer=optimizer,
+    loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+    metrics=['accuracy']
+)
+
+# Train model
+model.fit(
+    {
+        "input_ids": encodings["input_ids"],
+        "attention_mask": encodings["attention_mask"]
+    },
+    labels,
+    epochs=2
+)
